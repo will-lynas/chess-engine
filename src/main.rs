@@ -23,8 +23,8 @@ impl Counter {
     fn view(&self) -> Column<Message> {
         column![
             button("Increment").on_press(Message::Increment),
-            button("Decrement").on_press(Message::Decrement),
             text(self.value).size(69),
+            button("Decrement").on_press(Message::Decrement),
         ]
         .padding(16)
         .align_x(Center)
