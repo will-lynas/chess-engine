@@ -4,4 +4,4 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-iced = { git = "https://github.com/iced-rs/iced" }
+iced = { git = "https://github.com/iced-rs/iced", rev = "2b920235b528590694930da542e77db973d82be7" }
