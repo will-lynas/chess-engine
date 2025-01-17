@@ -5,7 +5,7 @@ use iced::{
         canvas::{Cache, Geometry, Path, Program},
         center, Canvas,
     },
-    Color, Element, Point, Rectangle, Renderer, Theme,
+    Color, Element, Point, Rectangle, Renderer, Size, Theme,
 };
 
 fn main() -> iced::Result {
@@ -45,8 +45,21 @@ impl Program<Message> for Board {
         _cursor: Cursor,
     ) -> Vec<Geometry> {
         let geom = self.cache.draw(renderer, bounds.size(), |frame| {
-            let rectangle = Path::rectangle(Point::ORIGIN, bounds.size());
-            frame.fill(&rectangle, Color::BLACK);
+            let square_size = bounds.size().width / 8.0;
+            for row in 0..8 {
+                for col in 0..8 {
+                    let rectangle = Path::rectangle(
+                        Point::new(row as f32 * square_size, col as f32 * square_size),
+                        Size::new(square_size, square_size),
+                    );
+                    let color = if (row + col) % 2 == 0 {
+                        Color::WHITE
+                    } else {
+                        Color::BLACK
+                    };
+                    frame.fill(&rectangle, color);
+                }
+            }
         });
 
         vec![geom]
