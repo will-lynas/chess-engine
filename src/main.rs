@@ -3,7 +3,7 @@ use iced::{
     mouse::Cursor,
     widget::{
         canvas::{Cache, Geometry, Path, Program},
-        center, responsive, Canvas,
+        center, responsive, svg, Canvas,
     },
     Color, Element,
     Length::Fill,
@@ -58,20 +58,22 @@ impl Program<Message> for Board {
         bounds: Rectangle,
         _cursor: Cursor,
     ) -> Vec<Geometry> {
+        let svg_handle = svg::Handle::from_path("sprites/Chess_klt45.svg");
         let geom = self.cache.draw(renderer, bounds.size(), |frame| {
             let square_size = bounds.size().width / 8.0;
             for row in 0..8 {
                 for col in 0..8 {
-                    let rectangle = Path::rectangle(
-                        Point::new(row as f32 * square_size, col as f32 * square_size),
-                        Size::new(square_size, square_size),
-                    );
+                    let loc = Point::new(row as f32 * square_size, col as f32 * square_size);
+                    let size = Size::new(square_size, square_size);
+                    let rectangle_path = Path::rectangle(loc, size);
+                    let rectangle = Rectangle::new(loc, size);
                     let color = if (row + col) % 2 == 0 {
                         Color::from_rgb8(157, 172, 255)
                     } else {
                         Color::from_rgb8(111, 115, 210)
                     };
-                    frame.fill(&rectangle, color);
+                    frame.fill(&rectangle_path, color);
+                    frame.draw_svg(rectangle, &svg_handle.clone());
                 }
             }
         });
