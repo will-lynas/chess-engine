@@ -1,11 +1,11 @@
 use iced::{
     application,
-    mouse::Cursor,
+    mouse::{self, Cursor},
     widget::{
         canvas::{Cache, Geometry, Path, Program},
-        center, responsive, svg, Canvas,
+        center, responsive, svg, Action, Canvas,
     },
-    Color, Element,
+    Color, Element, Event,
     Length::Fill,
     Point, Rectangle, Renderer, Size, Theme,
 };
@@ -20,7 +20,9 @@ struct App {
 }
 
 impl App {
-    fn update(&mut self, _message: Message) {}
+    fn update(&mut self, _message: Message) {
+        self.board.cache.clear()
+    }
 
     fn view(&self) -> Element<'_, Message> {
         responsive(|size| {
@@ -40,17 +42,19 @@ impl App {
 }
 
 #[derive(Debug)]
-struct Message;
+enum Message {
+    Dummy,
+}
 
 #[allow(dead_code)]
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 enum PieceColor {
     Black,
     White,
 }
 
 #[allow(dead_code)]
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 enum PieceKind {
     King,
     Queen,
@@ -60,7 +64,7 @@ enum PieceKind {
     Pawn,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 struct Piece {
     color: PieceColor,
     kind: PieceKind,
@@ -141,6 +145,28 @@ struct Board {
 
 impl Program<Message> for Board {
     type State = BoardState;
+
+    fn update(
+        &self,
+        state: &mut Self::State,
+        event: Event,
+        bounds: Rectangle,
+        cursor: Cursor,
+    ) -> Option<Action<Message>> {
+        if let Event::Mouse(mouse::Event::ButtonReleased(mouse::Button::Left)) = event {
+            if let Cursor::Available(Point { mut x, mut y }) = cursor {
+                x -= bounds.x;
+                y -= bounds.y;
+                let square_size = bounds.size().width / 8.0;
+                let x = (x / square_size).floor() as usize;
+                let y = (y / square_size).floor() as usize;
+                state.pieces[x][y] = None;
+            }
+            return Some(Action::publish(Message::Dummy));
+        };
+
+        None
+    }
 
     fn draw(
         &self,
