@@ -3,12 +3,9 @@ use iced::{
     mouse::Cursor,
     widget::{
         canvas::{Cache, Geometry, Path, Program},
-        column, Canvas,
+        center, Canvas,
     },
-    Alignment::Center,
-    Color, Element,
-    Length::Fill,
-    Point, Rectangle, Renderer, Size, Theme,
+    Color, Element, Point, Rectangle, Renderer, Theme,
 };
 
 fn main() -> iced::Result {
@@ -24,9 +21,7 @@ impl App {
     fn update(&mut self, _message: Message) {}
 
     fn view(&self) -> Element<'_, Message> {
-        column![Canvas::new(&self.board).width(Fill).height(Fill),]
-            .align_x(Center)
-            .into()
+        center(Canvas::new(&self.board).width(500).height(500)).into()
     }
 }
 
@@ -50,13 +45,7 @@ impl Program<Message> for Board {
         _cursor: Cursor,
     ) -> Vec<Geometry> {
         let geom = self.cache.draw(renderer, bounds.size(), |frame| {
-            let square_size = bounds.width.min(bounds.height) * 0.5;
-            let top_left = Point {
-                x: (bounds.width - square_size) / 2.0,
-                y: (bounds.height - square_size) / 2.0,
-            };
-            let rectangle = Path::rectangle(top_left, Size::new(square_size, square_size));
-
+            let rectangle = Path::rectangle(Point::ORIGIN, bounds.size());
             frame.fill(&rectangle, Color::BLACK);
         });
 
