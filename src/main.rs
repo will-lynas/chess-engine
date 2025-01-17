@@ -126,19 +126,19 @@ impl Program<Message> for Board {
     ) -> Vec<Geometry> {
         let geom = self.cache.draw(renderer, bounds.size(), |frame| {
             let square_size = bounds.size().width / 8.0;
-            for row in 0..8 {
-                for col in 0..8 {
-                    let loc = Point::new(row as f32 * square_size, col as f32 * square_size);
+            for x in 0..8 {
+                for y in 0..8 {
+                    let loc = Point::new(x as f32 * square_size, y as f32 * square_size);
                     let size = Size::new(square_size, square_size);
                     let rectangle_path = Path::rectangle(loc, size);
                     let rectangle = Rectangle::new(loc, size);
-                    let color = if (row + col) % 2 == 0 {
+                    let color = if (x + y) % 2 == 0 {
                         Color::from_rgb8(157, 172, 255)
                     } else {
                         Color::from_rgb8(111, 115, 210)
                     };
                     frame.fill(&rectangle_path, color);
-                    if let Some(svg_handle) = state.svg(row, col) {
+                    if let Some(svg_handle) = state.svg(x, y) {
                         frame.draw_svg(rectangle, &svg_handle);
                     }
                 }
