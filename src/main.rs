@@ -103,7 +103,33 @@ impl BoardState {
 impl Default for BoardState {
     fn default() -> Self {
         let mut pieces = vec![vec![None; 8]; 8];
-        pieces[4][4] = Some(Piece::new(PieceColor::White, PieceKind::Rook));
+
+        pieces[0][0] = Some(Piece::new(PieceColor::Black, PieceKind::Rook));
+        pieces[0][7] = Some(Piece::new(PieceColor::White, PieceKind::Rook));
+        pieces[7][0] = Some(Piece::new(PieceColor::Black, PieceKind::Rook));
+        pieces[7][7] = Some(Piece::new(PieceColor::White, PieceKind::Rook));
+
+        pieces[1][0] = Some(Piece::new(PieceColor::Black, PieceKind::Knight));
+        pieces[1][7] = Some(Piece::new(PieceColor::White, PieceKind::Knight));
+        pieces[6][0] = Some(Piece::new(PieceColor::Black, PieceKind::Knight));
+        pieces[6][7] = Some(Piece::new(PieceColor::White, PieceKind::Knight));
+
+        pieces[2][0] = Some(Piece::new(PieceColor::Black, PieceKind::Bishop));
+        pieces[2][7] = Some(Piece::new(PieceColor::White, PieceKind::Bishop));
+        pieces[5][0] = Some(Piece::new(PieceColor::Black, PieceKind::Bishop));
+        pieces[5][7] = Some(Piece::new(PieceColor::White, PieceKind::Bishop));
+
+        pieces[3][0] = Some(Piece::new(PieceColor::Black, PieceKind::Queen));
+        pieces[3][7] = Some(Piece::new(PieceColor::White, PieceKind::Queen));
+
+        pieces[4][0] = Some(Piece::new(PieceColor::Black, PieceKind::King));
+        pieces[4][7] = Some(Piece::new(PieceColor::White, PieceKind::King));
+
+        pieces.iter_mut().for_each(|col| {
+            col[1] = Some(Piece::new(PieceColor::Black, PieceKind::Pawn));
+            col[6] = Some(Piece::new(PieceColor::White, PieceKind::Pawn));
+        });
+
         Self { pieces }
     }
 }
@@ -148,28 +174,3 @@ impl Program<Message> for Board {
         vec![geom]
     }
 }
-//
-// fn get_svg((x, y): (usize, usize)) -> Option<svg::Handle> {
-//     let path = match (x, y) {
-//         // Pawns
-//         (_, 1) => Some("sprites/Chess_pdt45.svg"),
-//         (_, 6) => Some("sprites/Chess_plt45.svg"),
-//         // Rooks
-//         (0, 0) | (7, 0) => Some("sprites/Chess_rdt45.svg"),
-//         (0, 7) | (7, 7) => Some("sprites/Chess_rlt45.svg"),
-//         // Knights
-//         (1, 0) | (6, 0) => Some("sprites/Chess_ndt45.svg"),
-//         (1, 7) | (6, 7) => Some("sprites/Chess_nlt45.svg"),
-//         // Bishops
-//         (2, 0) | (5, 0) => Some("sprites/Chess_bdt45.svg"),
-//         (2, 7) | (5, 7) => Some("sprites/Chess_blt45.svg"),
-//         // Kings
-//         (4, 0) => Some("sprites/Chess_kdt45.svg"),
-//         (4, 7) => Some("sprites/Chess_klt45.svg"),
-//         // Queens
-//         (3, 0) => Some("sprites/Chess_qdt45.svg"),
-//         (3, 7) => Some("sprites/Chess_qlt45.svg"),
-//         _ => None,
-//     }?;
-//     Some(svg::Handle::from_path(path))
-// }
