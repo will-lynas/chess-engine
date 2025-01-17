@@ -53,9 +53,9 @@ impl Program<Message> for Board {
                         Size::new(square_size, square_size),
                     );
                     let color = if (row + col) % 2 == 0 {
-                        Color::WHITE
+                        Color::from_rgb8(157, 172, 255)
                     } else {
-                        Color::BLACK
+                        Color::from_rgb8(111, 115, 210)
                     };
                     frame.fill(&rectangle, color);
                 }
