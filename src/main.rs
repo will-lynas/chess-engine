@@ -3,9 +3,11 @@ use iced::{
     mouse::Cursor,
     widget::{
         canvas::{Cache, Geometry, Path, Program},
-        center, Canvas,
+        center, responsive, Canvas,
     },
-    Color, Element, Point, Rectangle, Renderer, Size, Theme,
+    Color, Element,
+    Length::Fill,
+    Point, Rectangle, Renderer, Size, Theme,
 };
 
 fn main() -> iced::Result {
@@ -21,7 +23,19 @@ impl App {
     fn update(&mut self, _message: Message) {}
 
     fn view(&self) -> Element<'_, Message> {
-        center(Canvas::new(&self.board).width(500).height(500)).into()
+        responsive(|size| {
+            let min_len = size.width.min(size.height);
+            let board_size = min_len * 0.8;
+            center(
+                Canvas::new(&self.board)
+                    .width(board_size)
+                    .height(board_size),
+            )
+            .width(Fill)
+            .height(Fill)
+            .into()
+        })
+        .into()
     }
 }
 
