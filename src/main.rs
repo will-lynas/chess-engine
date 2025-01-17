@@ -58,7 +58,6 @@ impl Program<Message> for Board {
         bounds: Rectangle,
         _cursor: Cursor,
     ) -> Vec<Geometry> {
-        let svg_handle = svg::Handle::from_path("sprites/Chess_klt45.svg");
         let geom = self.cache.draw(renderer, bounds.size(), |frame| {
             let square_size = bounds.size().width / 8.0;
             for row in 0..8 {
@@ -73,11 +72,21 @@ impl Program<Message> for Board {
                         Color::from_rgb8(111, 115, 210)
                     };
                     frame.fill(&rectangle_path, color);
-                    frame.draw_svg(rectangle, &svg_handle.clone());
+                    if let Some(svg_handle) = get_svg((row, col)) {
+                        frame.draw_svg(rectangle, &svg_handle);
+                    }
                 }
             }
         });
 
         vec![geom]
     }
+}
+
+fn get_svg((x, y): (usize, usize)) -> Option<svg::Handle> {
+    let path = match (x, y) {
+        (0, 0) => Some("sprites/Chess_klt45.svg"),
+        _ => None,
+    }?;
+    Some(svg::Handle::from_path(path))
 }
