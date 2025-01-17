@@ -46,14 +46,12 @@ enum Message {
     Dummy,
 }
 
-#[allow(dead_code)]
 #[derive(Clone, Debug)]
 enum PieceColor {
     Black,
     White,
 }
 
-#[allow(dead_code)]
 #[derive(Clone, Debug)]
 enum PieceKind {
     King,
